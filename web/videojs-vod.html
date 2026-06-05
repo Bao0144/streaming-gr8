@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video.js VOD Player</title>
+  <link href="https://vjs.zencdn.net/8.23.4/video-js.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #08101f;
+      color: #eef4ff;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    main {
+      width: min(920px, calc(100% - 32px));
+      padding: 24px;
+      border-radius: 20px;
+      border: 1px solid rgba(93, 234, 255, 0.22);
+      background: rgba(9, 16, 31, 0.92);
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 1.8rem;
+    }
+
+    p {
+      margin: 0 0 18px;
+      color: #9fb0cc;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Video.js player cho VOD HLS</h1>
+    <p>
+      File này bám đúng yêu cầu trong PDF: dùng <code>video.js</code> để phát playlist
+      HLS trên trình duyệt.
+    </p>
+
+    <video
+      id="my-video"
+      class="video-js vjs-default-skin"
+      controls
+      preload="auto"
+      width="800"
+      height="450"
+      data-setup="{}"
+    >
+      <source src="/vod/sample/index.m3u8" type="application/x-mpegURL">
+      Trình duyệt của bạn không hỗ trợ thẻ video.
+    </video>
+  </main>
+
+  <script src="https://vjs.zencdn.net/8.23.4/video.min.js"></script>
+</body>
+</html>

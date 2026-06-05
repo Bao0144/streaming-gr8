@@ -1,0 +1,47 @@
+# Build output
+.next/
+
+# Dependencies
+node_modules/
+
+# Runtime data and logs
+logs/
+run/
+data/hls/
+data/records/
+data/vod/
+client_body_temp/
+fastcgi_temp/
+proxy_temp/
+scgi_temp/
+uwsgi_temp/
+
+# OS / Windows metadata
+*:Zone.Identifier
+.DS_Store
+Thumbs.db
+
+# Local env / secrets
+.env
+.env.*
+!.env.example
+
+# Local databases and transient files
+*.sqlite
+*.sqlite3
+*.db
+*.pid
+*.log
+
+# Large local demo media that should not go to GitHub by default
+videos/
+facebook.mp4
+youtube.mp4
+video.mp4
+livebth.mp4
+Streaming Project - Google Chrome 2026-05-25 21-54-42.mp4
+
+# Personal export/report artifacts
+report.docx
+report.pdf
+Screenshot *.png
