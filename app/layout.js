@@ -3,7 +3,7 @@ import "video.js/dist/video-js.css";
 import GlobalTopBar from "components/global-topbar";
 
 export const metadata = {
-  title: "One Page Streaming Project",
+  title: "Hệ thống Streaming",
   description: "Ubuntu RTMP/HLS streaming control dashboard"
 };
 

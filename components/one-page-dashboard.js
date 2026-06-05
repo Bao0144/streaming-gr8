@@ -45,6 +45,7 @@ export default function OnePageDashboard({ currentUser, initialStats }) {
   const [manualStreamKey, setManualStreamKey] = useState("");
   const [qualityMode, setQualityMode] = useState("auto");
   const [adaptiveReady, setAdaptiveReady] = useState(false);
+  const [browserHost, setBrowserHost] = useState("");
   const [playerMetrics, setPlayerMetrics] = useState({
     resolution: "",
     droppedFrames: null,
@@ -53,6 +54,10 @@ export default function OnePageDashboard({ currentUser, initialStats }) {
     bufferHealth: null,
     levelLabel: null
   });
+
+  useEffect(() => {
+    setBrowserHost(window.location.hostname);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -131,13 +136,14 @@ export default function OnePageDashboard({ currentUser, initialStats }) {
 
   const liveSource = buildAdaptiveSource(effectiveStreamKey, qualityMode);
   const liveFallback = buildFallbackSource(effectiveStreamKey);
+  const demoHost = browserHost || "localhost";
 
   return (
     <main className="single-page-shell">
       <section className="single-hero">
         <div className="single-hero-copy">
           <p className="section-kicker">Project 3 - Multimedia streaming</p>
-          <h1>Hệ thống Streaming một trang</h1>
+          <h1>Hệ thống Streaming</h1>
           <p className="hero-copy">
             Toàn bộ thao tác demo VOD RTMP/HLS, live camera/OBS, record, restream,
             adaptive quality và thống kê realtime được gom trên cùng dashboard này.
@@ -294,14 +300,14 @@ export default function OnePageDashboard({ currentUser, initialStats }) {
           </article>
           <article className="info-card compact-card">
             <h3>OBS / Camera</h3>
-            <code>Server: rtmp://localhost:1935/live</code>
+            <code>Server: rtmp://{demoHost}:1935/live</code>
             <code>Stream Key: key tạo ở Studio</code>
             <p>Thêm Display Capture, Window Capture hoặc Video Capture Device để demo camera.</p>
           </article>
           <article className="info-card compact-card">
             <h3>VOD</h3>
             <code>./scripts/generate-vod-hls.sh videos/sample.mp4 sample</code>
-            <code>rtmp://localhost:1935/vod/mp4:sample.mp4</code>
+            <code>rtmp://{demoHost}:1935/vod/mp4:sample.mp4</code>
             <p>Đồng bộ thư viện ngay trong khu vực VOD rồi chọn HLS/RTMP/adaptive bằng nút trên trang.</p>
           </article>
         </div>

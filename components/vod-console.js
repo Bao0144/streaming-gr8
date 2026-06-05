@@ -5,6 +5,16 @@ import { toAbsoluteHlsUrl } from "components/hls-base-url";
 import HlsPlayer from "components/hls-player";
 import SocialPanel from "components/social-panel";
 
+function rewriteRtmpUrlForBrowser(url, browserHost) {
+  if (!browserHost) {
+    return url;
+  }
+
+  return String(url || "").replace(/^rtmp:\/\/(?:localhost|127\.0\.0\.1)(:\d+)?/i, (match, port = ":1935") => (
+    `rtmp://${browserHost}${port}`
+  ));
+}
+
 export default function VodConsole({ currentUser = null }) {
   const [videos, setVideos] = useState([]);
   const [query, setQuery] = useState("");
@@ -17,6 +27,7 @@ export default function VodConsole({ currentUser = null }) {
   const [syncState, setSyncState] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [brokenPosters, setBrokenPosters] = useState({});
+  const [browserHost, setBrowserHost] = useState("");
 
   async function loadLibrary({ sync = false } = {}) {
     setError("");
@@ -56,10 +67,7 @@ export default function VodConsole({ currentUser = null }) {
   }, []);
 
   useEffect(() => {
-    document.body.classList.add("vod-route-body");
-    return () => {
-      document.body.classList.remove("vod-route-body");
-    };
+    setBrowserHost(window.location.hostname);
   }, []);
 
   const filteredVideos = useMemo(() => {
@@ -77,6 +85,9 @@ export default function VodConsole({ currentUser = null }) {
     || videos.find((video) => video.id === selectedId)
     || filteredVideos[0]
     || null;
+  const selectedRtmpUrl = selectedVideo
+    ? rewriteRtmpUrlForBrowser(selectedVideo.rtmpUrl, browserHost)
+    : "";
 
   const qualityOptions = selectedVideo?.hlsPlayback?.options || [
     {
@@ -119,7 +130,7 @@ export default function VodConsole({ currentUser = null }) {
     }
 
     try {
-      await navigator.clipboard.writeText(selectedVideo.rtmpUrl);
+      await navigator.clipboard.writeText(selectedRtmpUrl);
       setCopyState("Đã sao chép RTMP URL.");
     } catch {
       setCopyState("Không thể sao chép RTMP URL.");
@@ -220,13 +231,13 @@ export default function VodConsole({ currentUser = null }) {
                         <p className="eyebrow">RTMP Playback</p>
                         <h2>Mở bằng VLC hoặc player hỗ trợ RTMP</h2>
                         <div className="command-block">
-                          <code>{selectedVideo.rtmpUrl}</code>
+                          <code>{selectedRtmpUrl}</code>
                         </div>
                         <div className="hero-actions compact-actions">
                           <button className="primary-btn button-reset" type="button" onClick={copyRtmpUrl}>
                             Sao chép RTMP URL
                           </button>
-                          <a className="ghost-btn" href={selectedVideo.rtmpUrl}>
+                          <a className="ghost-btn" href={selectedRtmpUrl}>
                             Mở giao thức RTMP
                           </a>
                           {canDeleteSelectedVideo ? (

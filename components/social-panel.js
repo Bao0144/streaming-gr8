@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 function formatCommentTime(value) {
   try {
-    return new Date(value).toLocaleString("vi-VN");
+    return new Date(value).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
   } catch {
     return value;
   }

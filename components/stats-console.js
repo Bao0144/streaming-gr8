@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getHlsBaseUrl } from "components/hls-base-url";
 
 function formatBytes(bytes) {
   if (bytes < 1024) {
@@ -32,7 +33,7 @@ function formatTime(value) {
     return "Chưa có";
   }
 
-  return new Date(value).toLocaleString("vi-VN");
+  return new Date(value).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
 }
 
 export default function StatsConsole({ initialData }) {
@@ -40,6 +41,7 @@ export default function StatsConsole({ initialData }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [pollDelay, setPollDelay] = useState(4000);
+  const [statsXmlUrl, setStatsXmlUrl] = useState("http://localhost:8080/stat");
 
   async function loadStats({ silent = false } = {}) {
     if (!silent) {
@@ -72,6 +74,10 @@ export default function StatsConsole({ initialData }) {
   function scrollToDashboardSection(id) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
+
+  useEffect(() => {
+    setStatsXmlUrl(`${getHlsBaseUrl()}/stat`);
+  }, []);
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -115,7 +121,7 @@ export default function StatsConsole({ initialData }) {
           <button className="ghost-btn button-reset" type="button" onClick={() => scrollToDashboardSection("studio")}>
             Quay lại Studio
           </button>
-          <a className="ghost-btn" href="http://localhost:8080/stat">
+          <a className="ghost-btn" href={statsXmlUrl}>
             Mở XML gốc
           </a>
         </div>

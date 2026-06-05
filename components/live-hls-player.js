@@ -114,15 +114,10 @@ export default function LiveHlsPlayer({
         }
       };
 
-      const playVideo = () => {
-        video.play().catch(() => {});
-      };
-
       const bindNativeSource = (src) => {
         cleanupHls();
         video.src = src;
         video.load();
-        playVideo();
       };
 
       setStatus(`Đang tải playlist: ${playlistPath}`);
@@ -158,12 +153,10 @@ export default function LiveHlsPlayer({
 
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           setStatus(`Đã nạp manifest: ${playlistPath}`);
-          playVideo();
           emitMetrics(hls);
         });
 
         hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-          playVideo();
           emitMetrics(hls);
         });
 
@@ -223,7 +216,7 @@ export default function LiveHlsPlayer({
           ref={videoRef}
           className="live-video-element"
           controls
-          autoPlay
+          muted
           playsInline
           preload="auto"
           aria-label={title}

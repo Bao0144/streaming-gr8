@@ -3,8 +3,15 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 NGINX_BIN="$ROOT_DIR/src/nginx-1.18.0/objs/nginx"
-CONF_FILE="$ROOT_DIR/conf/nginx.conf"
+CONF_TEMPLATE="$ROOT_DIR/conf/nginx.conf"
+CONF_FILE="$ROOT_DIR/run/nginx.conf"
 PID_FILE="$ROOT_DIR/run/nginx.pid"
+
+if [[ ! -f "$CONF_FILE" ]]; then
+  mkdir -p "$ROOT_DIR/run"
+  ESCAPED_ROOT_DIR="${ROOT_DIR//&/\\&}"
+  sed "s#__PROJECT_ROOT__#$ESCAPED_ROOT_DIR#g" "$CONF_TEMPLATE" > "$CONF_FILE"
+fi
 
 if [[ ! -f "$PID_FILE" ]]; then
   echo "Nginx is not running."

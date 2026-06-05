@@ -39,6 +39,16 @@ function buildActiveTargets(stream) {
   return targets;
 }
 
+function rewriteRtmpUrlForBrowser(url, browserHost) {
+  if (!browserHost) {
+    return url;
+  }
+
+  return String(url || "").replace(/^rtmp:\/\/(?:localhost|127\.0\.0\.1)(:\d+)?/i, (match, port = ":1935") => (
+    `rtmp://${browserHost}${port}`
+  ));
+}
+
 export default function StudioForm({ compact = false }) {
   const [title, setTitle] = useState("Demo stream");
   const [customKey, setCustomKey] = useState("");
@@ -69,16 +79,21 @@ export default function StudioForm({ compact = false }) {
     outboundBandwidth: 0
   });
   const [adaptiveState, setAdaptiveState] = useState("checking");
+  const [browserHost, setBrowserHost] = useState("");
   const [activityLog, setActivityLog] = useState([
     {
       id: 1,
       level: "info",
       message: "Studio control room đã sẵn sàng.",
-      time: new Date().toLocaleTimeString("vi-VN")
+      time: "--:--:--"
     }
   ]);
 
   const previewKey = slugify(customKey) || slugify(title) || "demo-stream";
+
+  useEffect(() => {
+    setBrowserHost(window.location.hostname);
+  }, []);
 
   function pushActivity(message, level = "info") {
     setActivityLog((current) => [
@@ -370,7 +385,7 @@ export default function StudioForm({ compact = false }) {
     };
   }, [stream.streamKey]);
 
-  const publishServer = stream.publishServer;
+  const publishServer = rewriteRtmpUrlForBrowser(stream.publishServer, browserHost);
   const localHls = stream.watchPath;
   const streamKey = stream.streamKey;
   const adaptiveLabel =

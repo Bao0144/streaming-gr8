@@ -102,9 +102,7 @@ export default function HlsPlayer({
         videoElement.onloadedmetadata = () => {
           setStatus(`Đã nạp metadata: ${playlistPath}`);
         };
-        videoElement.oncanplay = () => {
-          videoElement.play().catch(() => {});
-        };
+        videoElement.oncanplay = null;
         videoElement.onplaying = () => {
           setStatus(`Đang phát: ${playlistPath}`);
         };
@@ -124,7 +122,6 @@ export default function HlsPlayer({
 
         videoElement.src = src;
         videoElement.load();
-        videoElement.play().catch(() => {});
       };
 
       shellElement.tabIndex = 0;
@@ -163,7 +160,6 @@ export default function HlsPlayer({
 
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           setStatus(`Đã nạp manifest: ${playlistPath}`);
-          videoElement.play().catch(() => {});
         });
 
         hls.on(Hls.Events.LEVEL_LOADED, () => {
@@ -259,6 +255,7 @@ export default function HlsPlayer({
           className={`video-js vjs-default-skin${compact ? " video-element-compact" : ""}${fitContainer ? " video-element-fit" : ""}`}
           controls
           preload="auto"
+          muted
           playsInline
           data-setup="{}"
           aria-label={title}

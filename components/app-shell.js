@@ -297,7 +297,11 @@ export default function AppShell() {
             </div>
             <div className="status-line">
               <span>Updated</span>
-              <strong>{stats?.fetchedAt ? new Date(stats.fetchedAt).toLocaleTimeString("vi-VN") : "—"}</strong>
+              <strong>
+                {stats?.fetchedAt
+                  ? new Date(stats.fetchedAt).toLocaleTimeString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })
+                  : "—"}
+              </strong>
             </div>
           </div>
 
